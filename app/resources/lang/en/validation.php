@@ -126,6 +126,7 @@ return [
         'user_birthday_year'=>'生年月日',
         'user_birthday_month'=>'生年月日',
         'user_birthday_day'=>'生年月日',
+        'user_pass_confirmation'=>'確認用パスワード',
     ],
 
 ];

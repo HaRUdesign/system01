@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 use Illuminate\Http\Request;
 
 //追加
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Validator;
@@ -17,78 +18,23 @@ class UserController extends Controller
         return view('user.index',['user_data' =>$items]);
     }
 
+    /////////////////////////////ユーザー登録 /////////////////////////////
     //ユーザー登録画面
      public function add(Request $request){
-
         return view('user.add');
     }
 
     //ユーザー登録のデータ取得
      public function create(CreateUserRequest $request){
-
         $input = $request->all();
-
         //セッションに書き込む
         $request->session()->put("form_input", $input);
-
         return redirect()->action("UserController@confirm");
-
-
-        // $name = $request->input('name');
-
-        // $param = [
-        //     'user_familyname' =>$request->user_familyname,
-        //     'user_firstname' =>$request->user_firstname,
-        //     'user_kana_familyname' =>$request->user_kana_familyname,
-        //     'user_kana_firstname' =>$request->user_kana_firstname,
-        //     'user_sex' =>$request->user_sex,
-        //     'user_mail' =>$request->user_mail,
-        //     'user_pass' =>$request->user_pass,
-        //     'user_tel' =>$request->user_tel,
-        //     'user_address' =>$request->user_address,
-        //     'user_birthday' =>$request->user_birthday,
-        //     'user_newsletter' =>$request->user_newsletter,
-        //     'user_comment' =>$request->user_comment,
-        // ];
-
-        // DB::insert('insert into users (
-        //     user_familyname,
-        //     user_firstname,
-        //     user_kana_familyname,
-        //     user_kana_firstname,
-        //     user_sex,
-        //     user_mail,
-        //     user_pass,
-        //     user_tel,
-        //     user_address,
-        //     user_birthday,
-        //     user_newsletter,
-        //     user_comment
-        //     ) values (
-        //         :user_familyname,
-        //         :user_firstname,
-        //         :user_kana_familyname,
-        //         :user_kana_firstname,
-        //         :user_sex,
-        //         :user_mail,
-        //         :user_pass,
-        //         :user_tel,
-        //         :user_address,
-        //         :user_birthday,
-        //         :user_newsletter,
-        //         :user_comment
-        //         )',$param);
-
-        // return redirect('/user');
-
     }
 
-
      public function confirm(Request $request){
-
         //セッションから値を取り出す
         $input = $request->session()->get("form_input");
-
         //セッションに値が無い時はフォームに戻る
 		if(!$input){
 			return redirect()->action("UserController@add");
@@ -96,23 +42,18 @@ class UserController extends Controller
         return view("user.confirm",["input" => $input]);
     }
 
-
     function send(Request $request){
-
 		//セッションから値を取り出す
         $input = $request->session()->get("form_input");
-
         //戻るボタンが押された時
         if($request->has("back")){
             return redirect()->action("UserController@add")->withInput($input);
         }
-
 		//セッションに値が無い時はフォームに戻る
 		if(!$input){
 			return redirect()->action("UserController@add");
 		}
         //ここでメールを送信するなどを行う
-
 
         //DBへ保存
         $param = [
@@ -131,7 +72,6 @@ class UserController extends Controller
             'user_newsletter' =>$input['user_newsletter'],
             'user_comment' =>$input['user_comment'],
         ];
-
         DB::insert('insert into users (
             user_familyname,
             user_firstname,
@@ -163,16 +103,38 @@ class UserController extends Controller
                 :user_newsletter,
                 :user_comment
                 )',$param);
-
 		//セッションを空にする
 		$request->session()->forget("form_input");
-
 		return redirect()->action("UserController@complete");
     }
-
     function complete(){
 		return view("user.complete");
-	}
+    }
+
+    //////////////////////////////ユーザーログイン//////////////////////////////
+     function login(Request $request){
+		return view("user.login");
+    }
+
+    public function postSignin(Request $request){
+
+        if(Auth::attempt([
+            'email' => $request->input('email'),
+            'password' => $request->input('password')
+            ])){
+
+        return redirect()->route('user.profile');
+    }
+    return redirect()->back();
+
+    }
+
+
+
+
+
+
+
 
 
 

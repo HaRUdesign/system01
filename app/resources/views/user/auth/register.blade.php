@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>laravel</title>
+  <title>{{ config('app.name', 'Laravel') }}</title>
   <meta name="description" content="テスト" />
 
   <!-- CSRF Token -->
@@ -25,7 +24,7 @@
 <main>
 <h1>ユーザー登録</h1>
 
-<form action="{{ route('user.add') }}" method="post">
+<form action="{{ route('user.register') }}" method="post">
 @csrf
 
 <ul>
@@ -65,6 +64,12 @@
 @if ($errors->has('user_pass'))
 <span class="error">{{ $errors->first('user_pass')}}</span>
 @endif
+
+ <li>確認用：<input type="text" name="user_pass_confirmation">
+ @if ($errors->has('user_pass_confirmation'))
+<span class="error">{{ $errors->first('user_pass_confirmation')}}</span>
+@endif
+
 
 <li>電話番号(半角数字/ハイフンなし)：<input type="text" name="user_tel" value="{{ old('user_tel') }}"></li>
 @if ($errors->has('user_tel'))

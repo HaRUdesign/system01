@@ -14,22 +14,23 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->increments('user_id');
-            $table->string('user_mail')->unique();
-            $table->string('user_pass');
-            $table->string('user_familyname');
-            $table->string('user_firstname');
-            $table->string('user_kana_familyname');
-            $table->string('user_kana_firstname');
-            $table->string('user_sex');
-            $table->string('user_tel');
-            $table->string('user_address');
-            $table->string('user_birthday_year');
-            $table->string('user_birthday_month');
-            $table->string('user_birthday_day');
-            $table->string('user_newsletter');
-            $table->longText('user_comment');
+            $table->bigIncrements('user_id')->comment('ID');
+            $table->string('user_mail')->unique()->comment('メール');
+            $table->string('user_pass')->comment('パスワード');
+            $table->string('user_familyname')->comment('姓');
+            $table->string('user_firstname')->comment('名');
+            $table->string('user_kana_familyname')->comment('姓(カナ)');
+            $table->string('user_kana_firstname')->comment('名(カナ)');
+            $table->string('user_sex')->comment('性別');
+            $table->string('user_tel')->comment('電話番号');
+            $table->string('user_address')->comment('住所');
+            $table->string('user_birthday_year')->comment('生年月日(年)');
+            $table->string('user_birthday_month')->comment('生年月日(月)');
+            $table->string('user_birthday_day')->comment('生年月日(日)');
+            $table->string('user_newsletter')->comment('ニュースレターチェック');
+            $table->longText('user_comment')->comment('コメント');
             $table->timestamp('email_verified_at')->nullable();
+            $table->softDeletes()->comment('削除日時 : 削除・退会を行った日時この値がnullでなかったら、削除・退会を行ったとみなす');
             $table->rememberToken();
             $table->timestamps();
         });
