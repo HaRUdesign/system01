@@ -51,14 +51,8 @@ class RegisterController extends Controller
         //セッションに書き込む
         $request->session()->put("form_input", $input);
 
-       return view('user.auth.confirm');
+       return view("user.auth.confirm",["input" => $input]);
      }
-
-
-
-
-
-
 
     // バリデーション
     protected function validator(array $data)
@@ -82,35 +76,18 @@ class RegisterController extends Controller
         ]);
     }
 
-
-
      // //ユーザー登録データの確認画面
      public function confirm(Request $request){
-
-        dd($request);
-
-
-
-
-
-
-
-
 
         //セッションから値を取り出す
         $input = $request->session()->get("form_input");
         //セッションに値が無い時はフォームに戻る
 		if(!$input){
-			return redirect()->action("RegisterController@showRegistrationForm");
+			return redirect()->action("User\Auth\RegisterController@showRegistrationForm");
         }
 
         return view("user.auth.confirm",["input" => $input]);
     }
-
-
-
-
-
 
      // registerをオーバーライド
      public function register(Request $request)
@@ -119,28 +96,22 @@ class RegisterController extends Controller
         $input = $request->session()->get("form_input");
         //戻るボタンが押された時
         if($request->has("back")){
-            return redirect()->action("RegisterController@showRegistrationForm")->withInput($input);
+            return redirect()->action("User\Auth\RegisterController@showRegistrationForm")->withInput($input);
         }
 		//セッションに値が無い時はフォームに戻る
 		if(!$input){
-			return redirect()->action("RegisterController@showRegistrationForm");
+			return redirect()->action("User\Auth\RegisterController@showRegistrationForm");
 		}
         //ここでメールを送信するなどを行う
+
+        event(new Registered($user = $this->create($input)));
+        // $this->guard()->login($user);
+        // if ($response = $this->registered($request, $user)) {
+        //     return $response;
+        // }
+        return view("user.auth.complete");
+
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     // 登録処理
     protected function create(array $data)

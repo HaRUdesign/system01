@@ -34,6 +34,32 @@ class LoginController extends Controller
         return view('user.auth.login');
     }
 
+    // ログイン処理
+    public function authenticate(Request $request)
+    {
+         $request->validate([
+           'user_mail' => 'email|string|required',
+           'user_pass' => 'required|string|min:4',
+       ]);
+
+       $credentials = $request->only('user_mail', 'user_pass');
+
+        if (Auth::attempt($credentials, true)){
+            return redirect(route('user.home'))->with('message', 'ログインしました');
+        } else {
+            return redirect()->back()->withErrors(array('user_mail' => 'E-mailかPasswordが正しくありません'))->withInput();
+        }
+    }
+
+
+
+
+
+
+
+
+
+
     // ログアウト処理
     public function logout(Request $request)
     {

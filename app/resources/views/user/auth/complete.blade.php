@@ -17,7 +17,9 @@
 
 完了です。
 
-<a href="{{ route('user.add') }}">戻る</a>
+<a href="">ログインへ</a>
+
+
 
 </main>
 

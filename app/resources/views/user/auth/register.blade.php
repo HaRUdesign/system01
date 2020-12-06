@@ -24,7 +24,7 @@
 <main>
 <h1>ユーザー登録</h1>
 
-<form action="{{ route('user.register') }}" method="post">
+<form action="{{ route('user.confirm') }}" method="post">
 @csrf
 
 <ul>
@@ -55,17 +55,17 @@
 <span class="error">{{ $errors->first('user_sex')}}</span>
 @endif
 
-<li>メールアドレス：<input type="text" name="user_mail" value="{{ old('user_mail') }}"></li>
+<li>メールアドレス：<input type="email" name="user_mail" value="{{ old('user_mail') }}"></li>
 @if ($errors->has('user_mail'))
 <span class="error">{{ $errors->first('user_mail')}}</span>
 @endif
 
-<li>パスワード(8文字以上20文字以内/半角英数字のみ)：<input type="text" name="user_pass" value="{{ old('user_pass') }}"></li>
+<li>パスワード(8文字以上20文字以内/半角英数字のみ)：<input type="password" name="user_pass" value="{{ old('user_pass') }}"></li>
 @if ($errors->has('user_pass'))
 <span class="error">{{ $errors->first('user_pass')}}</span>
 @endif
 
- <li>確認用：<input type="text" name="user_pass_confirmation">
+ <li>確認用：<input type="password" name="user_pass_confirmation">
  @if ($errors->has('user_pass_confirmation'))
 <span class="error">{{ $errors->first('user_pass_confirmation')}}</span>
 @endif

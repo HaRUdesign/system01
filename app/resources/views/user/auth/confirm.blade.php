@@ -24,7 +24,7 @@
 <main>
 <h1>ユーザー登録</h1>
 
-<form action="{{ route('user.login') }}" method="post">
+<form action="{{ route('user.register') }}" method="post">
 @csrf
 <ul>
 <li>苗字：{{ $input["user_familyname"] }}</li>
